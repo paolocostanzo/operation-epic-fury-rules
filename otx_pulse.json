@@ -1,0 +1,101 @@
+{
+  "name": "Operation Epic Fury — Iranian APT Dual-Platform Campaign (Android+Windows) 2026",
+  "description": "Original OSINT research into Operation Epic Fury — an Iranian-linked campaign targeting Israeli civilians with a fake RedAlert rocket alert app following military operations of 28 Feb 2026.\n\nKEY ORIGINAL FINDINGS (not present in prior Unit 42 / CloudSEK / Cloudforce One / ClearSky / Trellix / Sophos reports):\n1. Secondary Windows C2: 167.160.187.43 / 9732.5486311.xyz — 0/94 VirusTotal\n2. Windows payload: LotAccessUI.EXE (trojanized AppEx Networks VPN 2016)\n3. Infrastructure active since June 2025 (8 months pre-operation)\n4. RDTSC anti-VM evasion (T1497.003) — C2 never contacted in sandbox → no public sandbox capture\n5. Second Android APK: umgdn / com.net.alerts with Pushy.me C2\n6. Tactical convergence with Arid Viper 2023 TTP pattern\n\nFull technical report: https://paolocostanzo.github.io/operation-epic-fury-cyber-war-iran/\nDetection rules (YARA + Sigma): https://github.com/paolocostanzo/operation-epic-fury-rules\nAuthor: Paolo Costanzo — paolocostanzo.github.io\nTLP: WHITE",
+  "tags": [
+    "iran",
+    "iranian-apt",
+    "operation-epic-fury",
+    "muddywater",
+    "mois",
+    "israel",
+    "redalert",
+    "lotaccess",
+    "android-spyware",
+    "windows-rat",
+    "rdtsc",
+    "anti-vm",
+    "appex-vpn",
+    "arid-viper",
+    "apt",
+    "t1497.003",
+    "t1071.001",
+    "t1053.005",
+    "dual-platform"
+  ],
+  "tlp": "white",
+  "public": true,
+  "indicators": [
+    {
+      "indicator": "216.45.58.148",
+      "type": "IPv4",
+      "title": "LotAccess Primary Windows C2 — HostPapa AS36352 Ashburn VA",
+      "description": "Primary C2 server for LotAccessUI.EXE Windows RAT. Documented by Unit 42 and CloudSEK. AppEx VPN API protocol on port 443."
+    },
+    {
+      "indicator": "167.160.187.43",
+      "type": "IPv4",
+      "title": "LotAccess Secondary Windows C2 — RackNerd Toronto CA — 0/94 VT UNDISCLOSED",
+      "description": "Secondary C2 server discovered via JARM fingerprint pivot. Had 0/94 VirusTotal detections at time of publication. Not documented by any prior vendor report. Active 17+ days post-operation."
+    },
+    {
+      "indicator": "api.ra-backup.com",
+      "type": "hostname",
+      "title": "Primary C2 domain — Android + Windows",
+      "description": "Primary C2 domain registered 2025-06-23 via NameCheap. Used by both Android APK exfiltration endpoint (/analytics/submit.php) and as hostname alias for Windows C2 IP."
+    },
+    {
+      "indicator": "9732.5486311.xyz",
+      "type": "hostname",
+      "title": "Secondary C2 domain — 0/94 VT UNDISCLOSED",
+      "description": "Secondary C2 domain registered 2025-07-08 via NameCheap. Had 0/94 VirusTotal detections at publication. Resolves to 167.160.187.43. Shares JARM fingerprint with primary C2."
+    },
+    {
+      "indicator": "5486311.xyz",
+      "type": "hostname",
+      "title": "Secondary C2 base domain",
+      "description": "Base domain for secondary C2 infrastructure. NameCheap / Withheld for Privacy ehf."
+    },
+    {
+      "indicator": "http://api.ra-backup.com/analytics/submit.php",
+      "type": "URL",
+      "title": "Android APK exfiltration endpoint — SMS/GPS/contacts",
+      "description": "HTTP POST endpoint used by RedAlert fake APK (com.red.alertx) to exfiltrate SMS messages, GPS location, and contact list. Went offline ~2026-03-08 following Unit 42/CloudSEK takedown reports."
+    },
+    {
+      "indicator": "https://api.pushy.me/register",
+      "type": "URL",
+      "title": "Pushy.me secondary C2 channel — stage 2 umgdn APK",
+      "description": "Pushy.me push notification service used as resilient C2 channel in undisclosed stage 2 APK (com.net.alerts / umgdn). Survives backend takedown. Pushy.me itself is a legitimate service."
+    },
+    {
+      "indicator": "6209a9524e97ee8ac5fb05668f2be9a18a455870bb8cf6022049ee8f458c12d6",
+      "type": "FileHash-SHA256",
+      "title": "LotAccessUI.EXE v3 — trojanized AppEx VPN — Windows RAT",
+      "description": "Latest version of LotAccess Windows RAT. 13/72 VT detections. CrowdStrike Falcon: CLEAN. RDTSC anti-VM evasion active — no public sandbox has ever captured C2 traffic. First submitted to VT ~2025-12."
+    },
+    {
+      "indicator": "7d43d7f6c743912b74273901494ed18451aa2824130d9d405da250a9fe3aad0d",
+      "type": "FileHash-SHA256",
+      "title": "LotAccessUI.EXE v1 — first submission 2025-12-16 (10 weeks pre-op)",
+      "description": "First known version of LotAccess Windows RAT. First VirusTotal submission 2025-12-16, 10 weeks before the Feb 28 operation. 4/65 VT detections. Proves infrastructure was prepared months in advance."
+    },
+    {
+      "indicator": "83651b0589665b112687f0858bfe2832ca317ba75e700c91ac34025ee6578b72",
+      "type": "FileHash-SHA256",
+      "title": "RedAlert fake APK — com.red.alertx — stage 1 Android spyware",
+      "description": "Primary Android spyware masquerading as RedAlert rocket alert app. Exfiltrates SMS, GPS, contacts to api.ra-backup.com/analytics/submit.php."
+    },
+    {
+      "indicator": "0cba66e78ddaeecfdd462c8cb39e443d083dc58c609b0edc73e8101e59ca91e8",
+      "type": "FileHash-SHA256",
+      "title": "umgdn APK — com.net.alerts — stage 2 UNDISCLOSED — Pushy.me C2",
+      "description": "Second Android spyware (stage 2), package com.net.alerts (umgdn). Not documented in any prior public report. Uses Pushy.me as resilient secondary C2 channel for push-based command delivery."
+    },
+    {
+      "indicator": "58dad3a41691265128c751d133d5525f",
+      "type": "FileHash-MD5",
+      "title": "LotAccessUI.EXE v3 MD5",
+      "description": "MD5 hash for LotAccess v3 Windows RAT sample."
+    }
+  ]
+}
