@@ -37,13 +37,17 @@ rule IranianAPT_LotAccess_EXE_2026 {
         description     = "LotAccess trojanized AppEx VPN client - Operation Epic Fury (Iran/Israel 2026)"
         author          = "Paolo Costanzo - paolocostanzo.github.io"
         date            = "2026-03-15"
-        tlp             = "WHITE"
         reference       = "https://paolocostanzo.github.io/operation-epic-fury-cyber-war-iran/"
         hash_v3_sha256  = "6209a9524e97ee8ac5fb05668f2be9a18a455870bb8cf6022049ee8f458c12d6"
         hash_v1_sha256  = "7d43d7f6c743912b74273901494ed18451aa2824130d9d405da250a9fe3aad0d"
-        imphash         = "d89625bf08b621847b3ab97338a84dda"
+        pe_imphash      = "d89625bf08b621847b3ab97338a84dda"
         mitre_attack    = "T1071.001, T1497.003, T1053.005, T1036.007, T1112, T1059.007"
         confidence      = "HIGH"
+        yarahub_uuid              = "30d13fd1-fbc1-446a-9e1d-853a2dd55d4b"
+        yarahub_license           = "CC0 1.0"
+        yarahub_rule_matching_tlp = "TLP:WHITE"
+        yarahub_rule_sharing_tlp  = "TLP:WHITE"
+        yarahub_reference_md5     = "58dad3a41691265128c751d133d5525f"
 
     strings:
         // Mutex — unique to this campaign, zero expected false positives
@@ -79,9 +83,11 @@ rule IranianAPT_LotAccess_EXE_2026 {
         uint16(0) == 0x5A4D                             // MZ header — PE file
         and filesize < 5MB
         and (
-            $mutex                                       // strongest single indicator
-            or ($c2_ip_primary and $cfg)                 // C2 IP + config = confirmed trojanization
-            or ($c2_ip_backup and $cfg)                  // undisclosed C2 + config
-            or ($appex_api_1 and ($c2_ip_primary or $c2_ip_backup))
+            $mutex                                       // strongest: campaign-unique mutex
+            or ($c2_ip_primary and $cfg)                 // primary C2 IP + VPN config
+            or ($c2_ip_backup and $cfg)                  // undisclosed secondary C2 + config
+            or ($c2_host and $cfg)                       // C2 hostname + VPN config
+            or (($appex_api_1 or $appex_api_2) and ($c2_ip_primary or $c2_ip_backup or $c2_host))
+            or ($reg_key and $sched_task and ($appex_brand or $tianqin))  // registry + persistence + AppEx identity
         )
 }

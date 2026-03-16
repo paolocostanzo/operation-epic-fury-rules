@@ -20,4 +20,4 @@ url,http://api.ra-backup.com/analytics/submit.php,HIGH,Android APK data exfiltra
 url,https://api.pushy.me/register,MEDIUM,Pushy.me secondary C2 channel in umgdn APK — resilient push channel,paolocostanzo.github.io,2026-03-15
 android_package,com.red.alertx,HIGH,RedAlert fake app — stage 1 spyware,paolocostanzo.github.io,2026-03-15
 android_package,com.net.alerts,HIGH,umgdn — stage 2 spyware UNDISCLOSED — Pushy.me C2,paolocostanzo.github.io,2026-03-15
-jarm,21d14d00021d21d00042d43d43d00041dd0fae37a26d202d4ca73c3c7b57c5a55,HIGH,JARM fingerprint shared by both C2 servers — used for pivot discovery,paolocostanzo.github.io,2026-03-15
+jarm,21d14d00021d21d00042d43d00041dd0fae37a26d202d4ca73c3c7b57c5a55,HIGH,JARM fingerprint shared by both C2 servers — used for pivot discovery,paolocostanzo.github.io,2026-03-15

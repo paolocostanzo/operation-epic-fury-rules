@@ -34,12 +34,16 @@ rule IranianAPT_RedAlert_APK_2026 {
         description     = "RedAlert fake APK spyware family - Operation Epic Fury (Iran/Israel 2026)"
         author          = "Paolo Costanzo - paolocostanzo.github.io"
         date            = "2026-03-15"
-        tlp             = "WHITE"
         reference       = "https://paolocostanzo.github.io/operation-epic-fury-cyber-war-iran/"
         hash_redalert   = "83651b0589665b112687f0858bfe2832ca317ba75e700c91ac34025ee6578b72"
         hash_umgdn      = "0cba66e78ddaeecfdd462c8cb39e443d083dc58c609b0edc73e8101e59ca91e8"
         mitre_attack    = "T1437, T1430, T1636.002"
         confidence      = "HIGH"
+        yarahub_uuid              = "2164d6a5-416c-4d65-ae79-bc7f3f2f39ba"
+        yarahub_license           = "CC0 1.0"
+        yarahub_rule_matching_tlp = "TLP:WHITE"
+        yarahub_rule_sharing_tlp  = "TLP:WHITE"
+        yarahub_reference_md5     = "9c6c67344fecd8ff8dbbee877aad7efc"
 
     strings:
         // Package names — stage 1 and stage 2
@@ -64,5 +68,6 @@ rule IranianAPT_RedAlert_APK_2026 {
             ($pkg_stage1 and $c2_host)                   // stage 1 confirmed variant
             or ($pkg_stage2 and $c2_host)                // stage 2 (umgdn) confirmed
             or ($c2_path and ($pushy_sdk or $pushy_api)) // any variant with C2 + Pushy
+            or ($pkg_stage1 and $spoof_store and $dex_debug) // stage 1 by behavior artifacts
         )
 }
