@@ -1,0 +1,46 @@
+title: Iranian APT RedAlert Android Spyware C2 Exfiltration
+id: f2b8e596-7a1c-8c6e-3d07-2e8f5a4b1d36
+status: stable
+description: |
+    Detects HTTP POST to the RedAlert fake APK data exfiltration endpoint
+    (api.ra-backup.com/analytics/submit.php) — Operation Epic Fury, Iranian campaign 2026.
+
+    The fake RedAlert app (com.red.alertx) exfiltrates SMS messages, GPS location,
+    and contacts to this endpoint. Both stage 1 (com.red.alertx) and stage 2
+    (umgdn / com.net.alerts) use this backend.
+
+    Note: the Pushy.me secondary C2 channel (api.pushy.me) in the stage 2 APK
+    is not covered by this rule — Pushy.me is a legitimate push notification
+    service used as a resilient C2 channel that survives backend takedown.
+    Monitor api.pushy.me traffic from mobile devices separately if needed.
+
+    The primary backend (api.ra-backup.com on AWS us-east-1) went offline
+    approximately 2026-03-08 following Unit 42/CloudSEK reports.
+    The secondary C2 (167.160.187.43 / 9732.5486311.xyz) remains active.
+
+references:
+    - https://paolocostanzo.github.io/operation-epic-fury-cyber-war-iran/
+    - https://unit42.paloaltonetworks.com/iranian-cyberattacks-2026/
+
+author: Paolo Costanzo - paolocostanzo.github.io
+date: 2026/03/15
+tags:
+    - attack.exfiltration
+    - attack.collection
+    - attack.t1041
+    - attack.t1636.002
+    - tlp.white
+
+logsource:
+    category: proxy
+
+detection:
+    selection:
+        c-uri|contains: '/analytics/submit.php'
+        cs-host|contains: 'ra-backup.com'
+    condition: selection
+
+falsepositives:
+    - None expected
+
+level: critical

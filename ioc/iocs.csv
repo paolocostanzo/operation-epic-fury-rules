@@ -1,0 +1,23 @@
+type,value,confidence,note,source,date_added
+ip,216.45.58.148,HIGH,Primary Windows C2 — HostPapa AS36352 Ashburn VA — documented by Unit 42/CloudSEK,paolocostanzo.github.io,2026-03-15
+ip,167.160.187.43,HIGH,Secondary Windows C2 — RackNerd AS36352 Toronto CA — 0/94 VT UNDISCLOSED,paolocostanzo.github.io,2026-03-15
+domain,api.ra-backup.com,HIGH,Primary C2 domain — registered 2025-06-23 NameCheap / Withheld for Privacy ehf,paolocostanzo.github.io,2026-03-15
+domain,9732.5486311.xyz,HIGH,Secondary C2 domain — registered 2025-07-08 NameCheap — 0/94 VT UNDISCLOSED,paolocostanzo.github.io,2026-03-15
+domain,5486311.xyz,MEDIUM,Secondary C2 base domain — NameCheap / Withheld for Privacy ehf,paolocostanzo.github.io,2026-03-15
+sha256,6209a9524e97ee8ac5fb05668f2be9a18a455870bb8cf6022049ee8f458c12d6,HIGH,LotAccessUI.EXE v3 — trojanized AppEx VPN — 13/72 VT — Windows RAT,paolocostanzo.github.io,2026-03-15
+sha256,7d43d7f6c743912b74273901494ed18451aa2824130d9d405da250a9fe3aad0d,HIGH,LotAccessUI.EXE v1 — first submission 2025-12-16 (10 weeks pre-op) — 4/65 VT,paolocostanzo.github.io,2026-03-15
+sha256,83651b0589665b112687f0858bfe2832ca317ba75e700c91ac34025ee6578b72,HIGH,RedAlert fake APK — com.red.alertx — stage 1 Android spyware,paolocostanzo.github.io,2026-03-15
+sha256,0cba66e78ddaeecfdd462c8cb39e443d083dc58c609b0edc73e8101e59ca91e8,HIGH,umgdn APK — com.net.alerts — stage 2 UNDISCLOSED — Pushy.me C2 channel,paolocostanzo.github.io,2026-03-15
+md5,58dad3a41691265128c751d133d5525f,HIGH,LotAccessUI.EXE v3 MD5,paolocostanzo.github.io,2026-03-15
+imphash,d89625bf08b621847b3ab97338a84dda,HIGH,LotAccessUI.EXE imphash — useful for PE family clustering,paolocostanzo.github.io,2026-03-15
+mutex,tqvpn-gui-keep-one-instance,HIGH,LotAccess Windows mutex — zero expected false positives,paolocostanzo.github.io,2026-03-15
+registry_key,HKCU\Software\AppEx Networks\LotAccess\firstServer,HIGH,C2 IP written at runtime (value = 216.45.58.148 on physical HW; 123456 in sandbox),paolocostanzo.github.io,2026-03-15
+registry_key,HKCU\Software\AppEx Networks\LotAccess\secondServer,HIGH,Secondary C2 IP written at runtime (value = 167.160.187.43 on physical HW; 123456 in sandbox),paolocostanzo.github.io,2026-03-15
+filepath,%TEMP%\EB93A6\cloudvpn.cfg,HIGH,Runtime-written VPN config containing C2 IPs,paolocostanzo.github.io,2026-03-15
+filepath,%TEMP%\EB93A6\ca.crt,HIGH,TianQin VPN CA certificate extracted by LotAccess,paolocostanzo.github.io,2026-03-15
+scheduled_task,Microsoft-Windows-DiskDiagnosticDataCollector,HIGH,Masquerade scheduled task — malicious if pointing to %TEMP% or LotAccessUI path,paolocostanzo.github.io,2026-03-15
+url,http://api.ra-backup.com/analytics/submit.php,HIGH,Android APK data exfiltration endpoint (SMS/GPS/contacts),paolocostanzo.github.io,2026-03-15
+url,https://api.pushy.me/register,MEDIUM,Pushy.me secondary C2 channel in umgdn APK — resilient push channel,paolocostanzo.github.io,2026-03-15
+android_package,com.red.alertx,HIGH,RedAlert fake app — stage 1 spyware,paolocostanzo.github.io,2026-03-15
+android_package,com.net.alerts,HIGH,umgdn — stage 2 spyware UNDISCLOSED — Pushy.me C2,paolocostanzo.github.io,2026-03-15
+jarm,21d14d00021d21d00042d43d43d00041dd0fae37a26d202d4ca73c3c7b57c5a55,HIGH,JARM fingerprint shared by both C2 servers — used for pivot discovery,paolocostanzo.github.io,2026-03-15
