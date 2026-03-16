@@ -18,6 +18,8 @@
 | 8 | SOC Prime | 5 regole Sigma | MEDIA | ☐ |
 | 9 | VirusTotal community | 4 post su campioni | MEDIA | ☐ |
 | 10 | ANY.RUN / Triage | Analisi pubblica | BASSA | ☐ |
+| 11 | Elastic detection-rules | PR Sigma → milioni di deployment | BONUS | ☐ |
+| 12 | Splunk Security Content | PR Sigma → ESCU updates | BONUS | ☐ |
 
 ---
 
@@ -364,14 +366,22 @@ pip install sigma-cli
 sigma check rules/windows/network_connection/net_connection_win_iranian_apt_lotaccess_c2.yml
 ```
 
-### 6.4 Aggiungi `modified` e `version` a ogni regola
+### 6.4 Aggiorna i metadati per SigmaHQ
 
-SigmaHQ richiede questi campi aggiuntivi. Aggiungi dopo `date:`:
+SigmaHQ ha requisiti più stretti del Sigma spec base. Per ogni regola copiata:
+
+**⚠️ CRITICO: cambia `status: stable` → `status: experimental`**
+SigmaHQ richiede che i contributi esterni partano da `experimental`. Le PR con `stable` vengono rifiutate.
+
+Aggiungi/modifica questi campi:
 ```yaml
-date: 2026/03/15
-modified: 2026/03/17
-version: 1
+status: experimental      # ← cambia da stable a experimental
+date: 2026/03/15          # formato slash, non trattino
+modified: 2026/03/17      # obbligatorio
+version: 1                # intero, obbligatorio
 ```
+
+**Nota sulla regola `payload_extraction`:** se SigmaHQ la rifiuta nella directory `process_creation/`, prova a spostarla in `rules/windows/file_event/` (la creazione di file in %TEMP% è un `file_event`, non un `process_creation`).
 
 ### 6.5 Commit e PR
 
@@ -626,6 +636,31 @@ Research: https://paolocostanzo.github.io/operation-epic-fury-cyber-war-iran/
 11:00  awesome-yara PR (step 7)
 12:00+ SOC Prime (step 8) — può aspettare
 ```
+
+---
+
+## 11+12. BONUS — Elastic e Splunk (massima penetrazione enterprise)
+
+Questi due canali distribuiscono le regole direttamente dentro i prodotti security (Elastic Security e Splunk Enterprise Security). Se le PR vengono accettate, le tue regole arrivano nei SIEM di migliaia di aziende automaticamente.
+
+### Elastic Security detection-rules
+```bash
+git clone https://github.com/paolocostanzo/detection-rules.git   # dopo aver forkato elastic/detection-rules
+cd detection-rules
+# Firma CLA Elastic (una volta sola) → https://www.elastic.co/contributor-license-agreement
+# Copia le regole in rules/integrations/windows/ o rules/network/
+# Apri PR verso elastic/detection-rules:main
+```
+Richiede CLA Elastic firmato. Le regole diventano parte di Elastic Security OOTB.
+
+### Splunk Security Content
+```bash
+git clone https://github.com/paolocostanzo/security_content.git   # dopo aver forkato splunk/security_content
+cd security_content
+# Copia le regole in detections/endpoint/ o detections/network/
+# Apri PR verso splunk/security_content:develop
+```
+Le regole vengono convertite in SPL e distribuite tramite ESCU (Enterprise Security Content Updates), accessibili a tutti gli utenti Splunk ES.
 
 ---
 
